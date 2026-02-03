@@ -1,0 +1,39 @@
+services:
+  questdb:
+    image: questdb/questdb:8.0.0
+    container_name: tradetool-questdb
+    ports:
+      - "9000:9000"   # Web console and REST API
+      - "9009:9009"   # InfluxDB Line Protocol (ILP) for high-speed ingestion
+      - "8812:8812"   # PostgreSQL wire protocol
+    volumes:
+      - questdb_data:/var/lib/questdb
+    environment:
+      - QDB_LOG_W_STDOUT_LEVEL=ERROR
+      - QDB_PG_USER=admin
+      - QDB_PG_PASSWORD=quest
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: tradetool-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  questdb_data:
+  redis_data:

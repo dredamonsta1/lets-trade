@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = ["crates/execution"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["TradeTool Team"]
+license = "MIT"
+
+[workspace.dependencies]
+pyo3 = { version = "0.22", features = ["extension-module"] }

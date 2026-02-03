@@ -1,0 +1,375 @@
+:root {
+	--bg-primary: #0d1117;
+	--bg-secondary: #161b22;
+	--bg-tertiary: #21262d;
+	--border-color: #30363d;
+	--text-primary: #e6edf3;
+	--text-secondary: #8b949e;
+	--text-muted: #6e7681;
+	--green: #3fb950;
+	--green-bg: rgba(63, 185, 80, 0.15);
+	--red: #f85149;
+	--red-bg: rgba(248, 81, 73, 0.15);
+	--blue: #58a6ff;
+	--yellow: #d29922;
+	--purple: #a371f7;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+	background-color: var(--bg-primary);
+	color: var(--text-primary);
+	line-height: 1.5;
+}
+
+.dashboard {
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	grid-template-rows: auto 1fr auto;
+	gap: 16px;
+	padding: 16px;
+	height: 100vh;
+	max-height: 100vh;
+	overflow: hidden;
+}
+
+.header {
+	grid-column: 1 / -1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background: var(--bg-secondary);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+}
+
+.header h1 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.header .status {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.status-indicator {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.875rem;
+}
+
+.status-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--text-muted);
+}
+
+.status-dot.connected {
+	background: var(--green);
+	box-shadow: 0 0 8px var(--green);
+}
+
+.status-dot.disconnected {
+	background: var(--red);
+}
+
+.main-content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	overflow: hidden;
+}
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	overflow-y: auto;
+}
+
+.panel {
+	background: var(--bg-secondary);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.panel-header {
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--border-color);
+	font-weight: 600;
+	font-size: 0.875rem;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.panel-content {
+	padding: 16px;
+}
+
+.chart-container {
+	flex: 1;
+	min-height: 300px;
+}
+
+.metrics-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	grid-column: 1 / -1;
+}
+
+.metric-card {
+	background: var(--bg-secondary);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 16px;
+}
+
+.metric-label {
+	font-size: 0.75rem;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 4px;
+}
+
+.metric-value {
+	font-size: 1.5rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.metric-value.positive {
+	color: var(--green);
+}
+
+.metric-value.negative {
+	color: var(--red);
+}
+
+.metric-change {
+	font-size: 0.75rem;
+	margin-top: 4px;
+}
+
+/* Order Book Styles */
+.orderbook {
+	font-size: 0.8125rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.orderbook-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	padding: 4px 0;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.orderbook-row:last-child {
+	border-bottom: none;
+}
+
+.orderbook-header {
+	color: var(--text-muted);
+	font-size: 0.6875rem;
+	text-transform: uppercase;
+	padding-bottom: 8px;
+	margin-bottom: 4px;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.orderbook-price {
+	text-align: center;
+}
+
+.orderbook-size {
+	text-align: right;
+}
+
+.orderbook-bar {
+	position: relative;
+}
+
+.orderbook-bar::before {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: var(--green-bg);
+	width: var(--bar-width, 0%);
+}
+
+.orderbook-bar.ask::before {
+	background: var(--red-bg);
+	left: 0;
+	right: auto;
+}
+
+.bid-price {
+	color: var(--green);
+}
+
+.ask-price {
+	color: var(--red);
+}
+
+.spread-row {
+	background: var(--bg-tertiary);
+	text-align: center;
+	padding: 8px;
+	margin: 4px 0;
+	border-radius: 4px;
+	font-size: 0.75rem;
+	color: var(--text-secondary);
+}
+
+/* Position Styles */
+.position {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.position-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.position-label {
+	color: var(--text-secondary);
+	font-size: 0.875rem;
+}
+
+.position-value {
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.position-value.long {
+	color: var(--green);
+}
+
+.position-value.short {
+	color: var(--red);
+}
+
+/* Trade History */
+.trades-list {
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.trade-row {
+	display: grid;
+	grid-template-columns: 60px 1fr 80px 60px;
+	gap: 8px;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--border-color);
+	font-size: 0.8125rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.trade-row:last-child {
+	border-bottom: none;
+}
+
+.trade-time {
+	color: var(--text-muted);
+}
+
+.trade-side {
+	font-weight: 600;
+}
+
+.trade-side.buy {
+	color: var(--green);
+}
+
+.trade-side.sell {
+	color: var(--red);
+}
+
+/* Strategy Controls */
+.controls {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.btn {
+	padding: 8px 16px;
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	background: var(--bg-tertiary);
+	color: var(--text-primary);
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.btn:hover {
+	background: var(--border-color);
+}
+
+.btn.primary {
+	background: var(--green);
+	border-color: var(--green);
+	color: white;
+}
+
+.btn.primary:hover {
+	background: #2ea043;
+}
+
+.btn.danger {
+	background: var(--red);
+	border-color: var(--red);
+	color: white;
+}
+
+.btn.danger:hover {
+	background: #da3633;
+}
+
+.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--border-color);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--text-muted);
+}
