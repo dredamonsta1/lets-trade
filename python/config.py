@@ -68,6 +68,12 @@ class Settings(BaseSettings):
         description="Symbols to trade",
     )
 
+    # Options Strategy
+    options_strategy_interval_seconds: int = Field(
+        default=60, # Run every 60 seconds by default
+        description="Interval in seconds for the options hedging strategy to run",
+    )
+
     # Logging
     log_level: str = Field(default="INFO", description="Logging level")
 
