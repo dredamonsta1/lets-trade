@@ -12,8 +12,8 @@ from python.config import settings
 from python.ib_connector import IBConnector, TickData # Keep IBConnector for now, but it's not used by options strategy
 from python.orderbook import OrderBookManager
 from python.strategy.market_maker import MarketMakerConfig, MarketMakerStrategy
-from python.alpaca_connector import AlpacaConnector
-from python.strategy.options_hedging_strategy import OptionsHedgingStrategy
+from .alpaca_connector import AlpacaConnector
+from .strategy.options_hedging_strategy import OptionsHedgingStrategy
 
 logger = structlog.get_logger(__name__)
 
@@ -202,7 +202,10 @@ async def run_options_strategy_task(app: web.Application) -> None:
     alpaca_connector = AlpacaConnector()
     
     # Initialize Options Hedging Strategy
-    options_strategy = OptionsHedgingStrategy(risk_free_rate=alpaca_connector.get_risk_free_rate())
+    options_strategy = OptionsHedgingStrategy(
+        risk_free_rate=alpaca_connector.get_risk_free_rate(),
+        alpaca_connector=alpaca_connector
+    )
 
     # Main loop for the options strategy
     while True:

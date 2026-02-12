@@ -73,6 +73,14 @@ class Settings(BaseSettings):
         default=60, # Run every 60 seconds by default
         description="Interval in seconds for the options hedging strategy to run",
     )
+    options_risk_free_rate: float = Field(
+        default=0.04, # Default risk-free rate for options calculations
+        description="Risk-free interest rate for options pricing models",
+    )
+    options_default_implied_volatility: float = Field(
+        default=0.25, # Default implied volatility if not available from data source
+        description="Default implied volatility to use if not provided by the data source",
+    )
 
     # Logging
     log_level: str = Field(default="INFO", description="Logging level")
