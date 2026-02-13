@@ -10,7 +10,7 @@ from typing import Dict, List, Any
 
 import structlog
 
-from ...alpaca_connector import AlpacaConnector
+from ..alpaca_connector import AlpacaConnector
 from ...config import settings
 from alpaca.data.enums import TimeFrame # Added
 
