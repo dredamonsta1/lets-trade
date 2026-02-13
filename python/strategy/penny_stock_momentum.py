@@ -11,25 +11,25 @@ from typing import Dict, List, Any
 import structlog
 
 from ..alpaca_connector import AlpacaConnector
-from ...config import settings
-from alpaca.data.enums import TimeFrame # Added
+from ..config import settings
+from alpaca.data.timeframe import TimeFrame # Corrected import
 
 logger = structlog.get_logger(__name__)
 
 class PennyStockMomentumStrategy:
     def __init__(self, alpaca_connector: AlpacaConnector):
         self.alpaca_connector = alpaca_connector
-        self.penny_stock_price_threshold = settings.penny_stock_price_threshold
-        self.penny_stock_market_cap_threshold = settings.penny_stock_market_cap_threshold
-        self.volume_avg_days = settings.penny_stock_volume_avg_days
-        self.volume_multiplier_entry = settings.penny_stock_volume_multiplier_entry
-        self.price_increase_entry_percent = settings.penny_stock_price_increase_entry_percent
-        self.price_increase_entry_window_minutes = settings.penny_stock_price_increase_entry_window_minutes
-        self.profit_target_min_percent = settings.penny_stock_profit_target_min_percent
-        self.profit_target_max_percent = settings.penny_stock_profit_target_max_percent
-        self.volume_decay_exit_percent = settings.penny_stock_volume_decay_exit_percent
-        self.stop_loss_percent = settings.penny_stock_stop_loss_percent
-        self.max_trade_amount = settings.penny_stock_max_trade_amount
+        self.penny_stock_price_threshold = settings.penny_stock.price_threshold
+        self.penny_stock_market_cap_threshold = settings.penny_stock.market_cap_threshold
+        self.volume_avg_days = settings.penny_stock.volume_avg_days
+        self.volume_multiplier_entry = settings.penny_stock.volume_multiplier_entry
+        self.price_increase_entry_percent = settings.penny_stock.price_increase_entry_percent
+        self.price_increase_entry_window_minutes = settings.penny_stock.price_increase_entry_window_minutes
+        self.profit_target_min_percent = settings.penny_stock.profit_target_min_percent
+        self.profit_target_max_percent = settings.penny_stock.profit_target_max_percent
+        self.volume_decay_exit_percent = settings.penny_stock.volume_decay_exit_percent
+        self.stop_loss_percent = settings.penny_stock.stop_loss_percent
+        self.max_trade_amount = settings.penny_stock.max_trade_amount
 
         self.monitored_stocks: Dict[str, Any] = {} # Stores data for stocks being monitored
         self.open_positions: Dict[str, Any] = {} # Stores data for currently open positions

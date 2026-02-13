@@ -40,10 +40,10 @@ class OptionsHedgingStrategy:
         total_gamma = 0
         for p in positions:
             gamma = calculate_gamma(
-                current_price, p['strike'], p['time'], # Corrected 'k' to 'strike', 't' to 'time'
+                current_price, p['strike'], p['time'],
                 self.risk_free_rate, p['iv']
             )
-            total_gamma += gamma * p['qty'] # 'qty' is used in the original gamma function
+            total_gamma += gamma * p['quantity'] # Corrected 'qty' to 'quantity'
 
         print(f"Current Total Gamma Exposure: {total_gamma:.2f}")
         if abs(total_gamma) > self.gamma_monitor_threshold:
