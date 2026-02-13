@@ -47,13 +47,12 @@ def _parse_alpaca_option_symbol(alpaca_option_symbol: str) -> Dict[str, Any]:
 
 class AlpacaConnector:
     def __init__(self):
-        self.api_key = os.getenv("ALPACA_API_KEY")
-        self.secret_key = os.getenv("ALPACA_SECRET_KEY")
-        # Alpaca-py uses a 'paper' boolean flag instead of base_url for paper trading
+        self.api_key = os.getenv("APCA_API_KEY_ID")
+        self.secret_key = os.getenv("APCA_API_SECRET_KEY")
         self.paper_trading = os.getenv("ALPACA_PAPER_TRADING", "True").lower() == "true"
 
         if not self.api_key or not self.secret_key:
-            raise ValueError("ALPACA_API_KEY and ALPACA_SECRET_KEY environment variables must be set.")
+            raise ValueError("APCA_API_KEY_ID and APCA_API_SECRET_KEY environment variables must be set.")
 
         self.trading_client = TradingClient(self.api_key, self.secret_key, paper=self.paper_trading)
         self.option_data_client = OptionHistoricalDataClient(self.api_key, self.secret_key)

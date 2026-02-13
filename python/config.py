@@ -48,6 +48,25 @@ class RiskSettings(BaseSettings):
     min_spread_bps: float = Field(default=5.0, description="Minimum spread in basis points")
 
 
+class PennyStockMomentumSettings(BaseSettings):
+    """Settings for the Penny Stock Momentum Strategy."""
+
+    model_config = SettingsConfigDict(env_prefix="PENNY_STOCK_")
+
+    price_threshold: float = Field(default=5.0, description="Max price for a penny stock")
+    market_cap_threshold: float = Field(default=300_000_000.0, description="Max market cap for a penny stock (USD)")
+    volume_avg_days: int = Field(default=50, description="Number of days for average volume calculation")
+    volume_multiplier_entry: float = Field(default=3.0, description="Volume multiplier for entry signal (e.g., 3.0 for 3x avg volume)")
+    price_increase_entry_percent: float = Field(default=2.0, description="Price increase percentage for entry signal (e.g., 2.0 for 2%)")
+    price_increase_entry_window_minutes: int = Field(default=5, description="Time window in minutes for price increase check")
+    profit_target_min_percent: float = Field(default=10.0, description="Minimum profit target percentage for exit")
+    profit_target_max_percent: float = Field(default=15.0, description="Maximum profit target percentage for exit")
+    volume_decay_exit_percent: float = Field(default=0.5, description="Volume decay percentage for exit (e.g., 0.5 for 50% of peak)")
+    stop_loss_percent: float = Field(default=3.0, description="Stop loss percentage from entry price")
+    max_trade_amount: float = Field(default=1000.0, description="Maximum USD amount to trade per position")
+    strategy_interval_seconds: int = Field(default=30, description="Interval in seconds for the penny stock strategy to run its main loop")
+
+
 class Settings(BaseSettings):
     """Root settings container."""
 
@@ -61,6 +80,7 @@ class Settings(BaseSettings):
     questdb: QuestDBSettings = Field(default_factory=QuestDBSettings)
     redis: RedisSettings = Field(default_factory=RedisSettings)
     risk: RiskSettings = Field(default_factory=RiskSettings)
+    penny_stock: PennyStockMomentumSettings = Field(default_factory=PennyStockMomentumSettings) # Added
 
     # Trading symbols
     symbols: list[str] = Field(

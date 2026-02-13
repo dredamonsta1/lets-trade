@@ -14,6 +14,7 @@ from python.orderbook import OrderBookManager
 from python.strategy.market_maker import MarketMakerConfig, MarketMakerStrategy
 from .alpaca_connector import AlpacaConnector
 from .strategy.options_hedging_strategy import OptionsHedgingStrategy
+from .strategy.penny_stock_momentum import PennyStockMomentumStrategy # Added
 
 logger = structlog.get_logger(__name__)
 
@@ -23,6 +24,7 @@ orderbook_manager = OrderBookManager()
 strategy: MarketMakerStrategy | None = None # Existing Market Maker Strategy
 alpaca_connector: AlpacaConnector | None = None # New Alpaca Connector
 options_strategy: OptionsHedgingStrategy | None = None # New Options Hedging Strategy
+penny_stock_momentum_strategy: PennyStockMomentumStrategy | None = None # Added
 ib_connector: IBConnector | None = None # Existing IB Connector (not used by options strategy)
 
 
@@ -231,7 +233,7 @@ async def run_options_strategy_task(app: web.Application) -> None:
         except Exception as e:
             logger.error("Error in options strategy task", error=e)
         
-        await asyncio.sleep(settings.OPTIONS_STRATEGY_INTERVAL_SECONDS) # Run every X seconds
+        await asyncio.sleep(settings.options_strategy_interval_seconds) # Run every X seconds
 
 
 async def start_background_tasks(app: web.Application) -> None:
@@ -254,6 +256,12 @@ async def start_background_tasks(app: web.Application) -> None:
     app["options_strategy_task"] = asyncio.create_task(run_options_strategy_task(app))
     logger.info("Started options hedging strategy task")
 
+    # Start penny stock momentum strategy task
+    global penny_stock_momentum_strategy
+    penny_stock_momentum_strategy = PennyStockMomentumStrategy(alpaca_connector=alpaca_connector)
+    app["penny_stock_momentum_task"] = asyncio.create_task(penny_stock_momentum_strategy.run_strategy())
+    logger.info("Started penny stock momentum strategy task")
+
 
 async def cleanup_background_tasks(app: web.Application) -> None:
     """Clean up background tasks when the app shuts down."""
@@ -268,6 +276,13 @@ async def cleanup_background_tasks(app: web.Application) -> None:
         app["options_strategy_task"].cancel()
         try:
             await app["options_strategy_task"]
+        except asyncio.CancelledError:
+            pass
+    
+    if "penny_stock_momentum_task" in app:
+        app["penny_stock_momentum_task"].cancel()
+        try:
+            await app["penny_stock_momentum_task"]
         except asyncio.CancelledError:
             pass
 
